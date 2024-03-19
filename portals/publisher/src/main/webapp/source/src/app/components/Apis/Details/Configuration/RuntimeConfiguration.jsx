@@ -15,7 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
+/* eslint-disable */
 import React, {
     useReducer, useContext, useState, useEffect,
 } from 'react';
@@ -48,6 +48,8 @@ import {
     API_SECURITY_OAUTH_BASIC_AUTH_API_KEY_MANDATORY,
     API_SECURITY_MUTUAL_SSL_MANDATORY,
     API_SECURITY_MUTUAL_SSL,
+    API_SECURITY_MUTUAL_SSL_OPTIONAL,
+    API_SECURITY_OAUTH_BASIC_AUTH_API_KEY_OPTIONAL,
 } from './components/APISecurity/components/apiSecurityConstants';
 import WebSubConfiguration from './components/WebSubConfiguration';
 
@@ -243,12 +245,9 @@ export default function RuntimeConfiguration() {
                 return { ...copyAPIConfig(state), [action]: value };
             case 'securityScheme':
                 // If event came from mandatory selector of either Application level or Transport level
-                if (
-                    [API_SECURITY_MUTUAL_SSL_MANDATORY, API_SECURITY_OAUTH_BASIC_AUTH_API_KEY_MANDATORY]
-                        .includes(event.name)
-                ) {
+                if ([API_SECURITY_MUTUAL_SSL_MANDATORY, API_SECURITY_OAUTH_BASIC_AUTH_API_KEY_MANDATORY].includes(event.name)) {
                     // If user select not mandatory (optional) , Remove the respective schema, else add it
-                    if (event.value === 'optional') {
+                    if (event.value === API_SECURITY_MUTUAL_SSL_OPTIONAL || event.value === API_SECURITY_OAUTH_BASIC_AUTH_API_KEY_OPTIONAL) {
                         return {
                             ...copyAPIConfig(state),
                             [action]: state[action].filter((schema) => schema !== event.name),

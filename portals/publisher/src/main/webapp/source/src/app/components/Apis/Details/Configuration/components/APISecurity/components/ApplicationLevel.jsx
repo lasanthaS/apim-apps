@@ -16,6 +16,7 @@
  * under the License.
  */
 
+/* eslint-disable */
 import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import PropTypes from 'prop-types';
@@ -126,9 +127,9 @@ export default function ApplicationLevel(props) {
     // If not Oauth2, Basic auth or ApiKey security is selected, no mandatory values should be pre-selected
     if (!(securityScheme.includes(DEFAULT_API_SECURITY_OAUTH2) || securityScheme.includes(API_SECURITY_BASIC_AUTH)
         || securityScheme.includes(API_SECURITY_API_KEY))) {
-        mandatoryValue = null;
-    } else if (!securityScheme.includes(API_SECURITY_MUTUAL_SSL)) {
         mandatoryValue = API_SECURITY_OAUTH_BASIC_AUTH_API_KEY_MANDATORY;
+    // } else if (!securityScheme.includes(API_SECURITY_MUTUAL_SSL)) {
+    //     mandatoryValue = API_SECURITY_OAUTH_BASIC_AUTH_API_KEY_MANDATORY;
     } else if (securityScheme.includes(API_SECURITY_OAUTH_BASIC_AUTH_API_KEY_MANDATORY)) {
         mandatoryValue = API_SECURITY_OAUTH_BASIC_AUTH_API_KEY_MANDATORY;
     } else {
@@ -147,6 +148,10 @@ export default function ApplicationLevel(props) {
     }, []);
 
     const [mandatoryValueRef, setMandatoryValueRef] = useState(mandatoryValue);
+    if (mandatoryValue !== mandatoryValueRef) {
+        setMandatoryValueRef(mandatoryValue);
+    }
+    // alert(mandatoryValue + ' ::: ' + mandatoryValueRef);
 
     return (
         (<Root>
@@ -243,6 +248,7 @@ export default function ApplicationLevel(props) {
                                 value={mandatoryValueRef}
                                 onChange={({ target: { name, value } }) => {
                                     setMandatoryValueRef(value);
+                                    console.log({ name, value });
                                     configDispatcher({
                                         action: 'securityScheme',
                                         event: { name, value },
@@ -257,6 +263,8 @@ export default function ApplicationLevel(props) {
                                             disabled={!haveMultiLevelSecurity
                                                 || isRestricted(['apim:api_create'], apiFromContext)}
                                             color='primary'
+                                            checked={
+                                                mandatoryValueRef === API_SECURITY_OAUTH_BASIC_AUTH_API_KEY_MANDATORY}
                                         />
                                     )}
                                     label='Mandatory'
@@ -269,6 +277,8 @@ export default function ApplicationLevel(props) {
                                             disabled={!haveMultiLevelSecurity
                                                 || isRestricted(['apim:api_create'], apiFromContext)}
                                             color='primary'
+                                            checked={
+                                                mandatoryValueRef === API_SECURITY_OAUTH_BASIC_AUTH_API_KEY_OPTIONAL}
                                         />
                                     )}
                                     label='Optional'

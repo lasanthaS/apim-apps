@@ -194,7 +194,7 @@ function TransportLevel(props) {
     let mandatoryValue = API_SECURITY_MUTUAL_SSL_OPTIONAL;
     // If not mutual ssl security is selected, no mandatory values should be pre-selected
     if (!isMutualSSLEnabled) {
-        mandatoryValue = 'null';
+        mandatoryValue = null;
     } else if (
         !(securityScheme.includes(DEFAULT_API_SECURITY_OAUTH2) || securityScheme.includes(API_SECURITY_BASIC_AUTH)
             || securityScheme.includes(API_SECURITY_API_KEY))
@@ -218,6 +218,10 @@ function TransportLevel(props) {
     }, []);
 
     const [mandatoryValueRef, setMandatoryValueRef] = useState(mandatoryValue);
+    if (mandatoryValue !== mandatoryValueRef) {
+        setMandatoryValueRef(mandatoryValue);
+    }
+    // alert(mandatoryValueRef);
 
     return (
         (<Root>
@@ -268,6 +272,7 @@ function TransportLevel(props) {
                                                 disabled={!haveMultiLevelSecurity
                                                 || isRestricted(['apim:api_create'], apiFromContext)}
                                                 color='primary'
+                                                checked={mandatoryValueRef === API_SECURITY_MUTUAL_SSL_MANDATORY}
                                             />
                                         )}
                                         label='Mandatory'
@@ -280,6 +285,7 @@ function TransportLevel(props) {
                                                 disabled={!haveMultiLevelSecurity
                                                 || isRestricted(['apim:api_create'], apiFromContext)}
                                                 color='primary'
+                                                checked={mandatoryValueRef === API_SECURITY_MUTUAL_SSL_OPTIONAL}
                                             />
                                         )}
                                         label='Optional'
