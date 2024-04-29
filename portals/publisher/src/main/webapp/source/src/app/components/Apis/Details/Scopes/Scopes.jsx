@@ -67,7 +67,7 @@ const Root = styled('div')(({ theme }) => ({
 
     [`& .${classes.headline}`]: { paddingTop: theme.spacing(1.25), paddingLeft: theme.spacing(2.5) },
 
-    [`& .${classes.heading}`]: {
+    [`&.${classes.heading}`]: {
         flexGrow: 1,
         marginTop: 10,
         '& table td:nth-child(2)': {
@@ -356,7 +356,7 @@ class Scopes extends React.Component {
         }
 
         return (
-            <div className={classes.heading}>
+            <Root className={classes.heading}>
                 <div className={classes.titleWrapper}>
                     <Typography variant='h4' component='h2' align='left' className={classes.mainTitle}>
                         <FormattedMessage
@@ -407,7 +407,7 @@ class Scopes extends React.Component {
                 </div>
 
                 <MUIDataTable title={false} data={scopesList} columns={columns} options={options}/>
-            </div>
+            </Root>
         );
     }
 }
